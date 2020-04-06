@@ -20,7 +20,7 @@ class App extends React.Component {
           !this.state.username ?
           <Login setUsername={this.setUsername}/>
           :
-          <MessagingPanel />
+          <MessagingPanel username = {this.state.username}/>
         }
       </div>
     );

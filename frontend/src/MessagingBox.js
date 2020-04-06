@@ -6,7 +6,7 @@ class MessagingBox extends React.Component {
   messageHandler = (e) => {
     if (e.keyCode === 13) {
       e.preventDefault();
-      this.props.setMessages(e.target.value);
+      this.props.sendMessages(e.target.value);
       e.target.value = ""
     }
   }

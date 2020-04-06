@@ -1,5 +1,4 @@
 import React, {Component, Fragment} from 'react';
-import logo from './logo.svg';
 import './App.css';
 import DisplayConversation from './DisplayConversation';
 import MessagingBox from './MessagingBox';
@@ -9,15 +8,32 @@ class MessagingPanel extends Component {
     messages: []
   }
 
-  setMessages = (message) => {
-    this.setState({messages: [...this.state.messages, message]})
+  connection = new WebSocket('wss://localhost:3030/')
+
+  // open connection to receive messages
+  componentDidMount() {
+    this.connection.onmessage = (message) => {
+      console.log(JSON.parse(message.data))
+      const data = JSON.parse(message.data);
+      this.setState({messages: [...this.state.messages, data]})
+    }
+  }
+
+  // send message to socket
+  sendMessages = (message) => {
+    // this.setState({messages: [...this.state.messages, message]})
+    const data = {
+      username: this.props.username,
+      message: message
+    }
+    this.connection.send(JSON.stringify(data))
   }
 
   render() {
     return (
       <Fragment>
-        <DisplayConversation />
-        <MessagingBox setMessages={this.setMessages}/>
+        <DisplayConversation messages={this.state.messages}/>
+        <MessagingBox sendMessages={this.sendMessages}/>
       </Fragment>
     );
   }
